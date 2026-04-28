@@ -27,11 +27,20 @@ pipeline {
                     credentialsId: 'github-to-jenkin'
             }
         }
-
+        stage('Create Env File') {
+            steps {
+                sh '''
+                    echo "NODE_ENV=production" > .env.production.local
+                    echo "VUE_APP_URL=https://truong-cicd-youtube.vti2509.click" >> .env.production.local
+                    echo "VUE_APP_TITLE=My App Production" >> .env.production.local
+                '''
+            }
+        }
         stage('📦 Build Frontend') {
             steps {
                 sh '''
                     export NODE_OPTIONS=--openssl-legacy-provider
+                    rm -rf dist/
                     npm install
                     npm run build
                 '''
